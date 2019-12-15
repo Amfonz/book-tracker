@@ -1,0 +1,94 @@
+#create {
+  border-radius: 50%;
+  border: none;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+}
+#create:hover {
+  background-color: grey;
+}
+
+/*     Style of book             */
+.book-container{
+  background-color: transparent;
+  perspective: 10000px;
+  position: absolute;
+  height: 500px;
+  width: 400px;
+}
+.book-container:hover .back{
+  opacity: 1;
+}
+.front {
+  height: 100%;
+  border: 1px solid black;
+}
+.black-box {
+  background-color: black;
+  height: 30%;
+}
+.white-bar {
+  height: 10%;
+  background-color: white;
+}
+.cover {
+  height: 60%;
+  width: 100%;
+}
+.white-bar img {
+  width: 5%;
+  margin: 0 10px;
+}
+
+.author-front {
+  position: relative;
+  top: 20%;
+  color: orange;
+}
+.title-front {
+  position: relative;
+  top: 35%;
+  color: white
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform .5s;
+  transform-style: preserve-3d;
+}
+.book-container:hover .flip-inner{
+  transform: rotateY(180deg);
+}
+.front, .back{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+
+
+.back {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  overflow: hidden;
+  transform: rotateY(180deg);
+
+}
+.back p{
+  color: white;
+}
+
+
+/* typography */
+.title-front {
+  font-size: 150%;
+}
+.author-front {
+  font-size: 120%;
+}
