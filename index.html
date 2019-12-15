@@ -31,13 +31,29 @@
             <p>Title: <span class="title">The Martian Chronicles</span></p>
             <p>Author: <span class="author">Ray Bradbury</span></p>
             <p>Pages: <span class="pages"> 200</span></p>
-
-            <button>Update</button>
-            <button>Remove</button>
-            <button>Read</button>
+            <div class="back-button-container">
+              <button class="update"></button>
+              <button class="remove"></button>
+              <button class="read"></button>
+            </div>
           </div>
-       </div>
+        </div>
       </div>
+    </div>
+    <!-- end shelf -->
+    <div id="form-container">
+      <form>
+        <label for="create-title">Title: </label>
+        <input type="text" id="create-title">
+        <label for="create-author">Author: </label>
+        <input type="text" id="create-author">
+        <label for="create-pages">Pages: </label>
+        <input type="text" id="create-pages">
+        <label for="create-cover">Cover Image (URL): </label>
+        <input type="text" id="create-cover">
+        <label for="create-read">Read? </label>
+        <input type="checkbox" id="create-read">
+      </form>
     </div>
   </main>
   <footer></footer>
