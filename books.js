@@ -11,7 +11,7 @@
       - toggle read status on book object
       - affects the button on back
 
-
+    check mark on cover of read books
 */
 
 
@@ -115,6 +115,7 @@ function displayNewBook(book) {
   let shelf = document.querySelector('#shelf');
   let books = shelf.childNodes;
 
+  bookContainer.dataset.index = books.length-1;
   shelf.insertBefore(bookContainer,books[0]);
 }
 
@@ -132,6 +133,21 @@ function createBook(){
   library.push(new Book(title,author,pages,read,cover));
 
 }
+
+function removeBook(e){
+  //remove from library and remove from display
+  //use dataset index
+  
+  let index = e.target.dataset.index;
+
+}
+/*function updateShelfIndexes(){
+  let books = document.querySelector('#shelf').children;
+  for(let i = 1; i < books.length; i++){
+    books[i].dataset.index = Number(books[i].dataset.index) + 1; 
+  }
+}*/
+
 
 function toggleForm(){
   let form = document.querySelector('#form-container');
