@@ -16,7 +16,6 @@
 
 
 
-let library = [];
 
 function Book(title,author,pages,read,coverURL){
   this.title = title;
@@ -41,10 +40,7 @@ function Library() {
   this.collection = [];
 }
 
-
-
-
-function displayNewBook(book) {
+Library.prototype.displayNewBook = function(book){
   let bookContainer = document.createElement('div');
   bookContainer.classList.add('book-container');
 
@@ -57,6 +53,7 @@ function displayNewBook(book) {
   front.classList.add('front');
   
   flipContainer.appendChild(front);
+
 
   let cover = document.createElement('img');
   cover.classList.add('cover');
@@ -77,7 +74,6 @@ function displayNewBook(book) {
   whiteBar.appendChild(whiteBarImage);
   whiteBar.appendChild(whiteSpan2);
   front.appendChild(whiteBar);
-
   let blackBox = document.createElement('div');
   blackBox.classList.add('black-box') ;
   let authorFront = document.createElement('p');
@@ -110,8 +106,7 @@ function displayNewBook(book) {
   update.classList.add('update');
   let remove = document.createElement('button');
   remove.classList.add('remove');
-  remove.addEventListener('click',removeBook);
-  
+  remove.addEventListener('click',thisLibrary.removeBook.bind(this));
   let read = document.createElement('button');
   read.classList.add('read');
   backButtons.appendChild(update);
@@ -124,19 +119,14 @@ function displayNewBook(book) {
   back.appendChild(backPages);
   back.appendChild(backButtons);
 
+  let books = this.shelf.children;
 
-
-  let shelf = document.querySelector('#shelf');
-  let books = shelf.childNodes;
-
-  bookContainer.dataset.index = books.length-1;
-  shelf.insertBefore(bookContainer,books[0]);
+  bookContainer.dataset.index = books.length;
+  this.shelf.insertBefore(bookContainer,books[0]);
+  
 }
 
-
-
-
-function createBook(){
+Library.prototype.addBook = function() {
   let title = document.querySelector('#create-title').value;
   let author = document.querySelector('#create-author').value;
   let pages = document.querySelector('#create-pages').value;
@@ -144,9 +134,12 @@ function createBook(){
   if (cover == "") cover = "https://img.icons8.com/ios-filled/50/000000/open-book.png"
   let read = Boolean(document.querySelector('#create-read').checked);
 
-  library.push(new Book(title,author,pages,read,cover));
+  this.collection.push(new Book(title,author,pages,read,cover));
 
 }
+
+
+
 
 function getBookNode(button){
   let node = button;
@@ -156,15 +149,14 @@ function getBookNode(button){
   return node;
 }
 
-function removeBook(e){
+Library.prototype.removeBook = function(e){
   //remove from library and remove from display
   //use dataset index
   //delete from display and remove from array
   let targ = getBookNode(e.target);
   let index = Number(targ.dataset.index);
-  library = library.slice(0,index).concat(library.slice(index+1));
-  let shelf = document.querySelector('#shelf');
-  shelf.removeChild(targ);
+  this.collection = this.collection.slice(0,index).concat(this.collection.slice(index+1));
+  this.shelf.removeChild(targ);
 }
 
 
@@ -186,8 +178,9 @@ document.querySelector("form").addEventListener('submit',(e) => {
 });
 
 document.querySelector("#sub").addEventListener('click',() => {
-  createBook();
-  displayNewBook(library[library.length-1]);
+  thisLibrary.addBook();
+  thisLibrary.displayNewBook(thisLibrary.collection[thisLibrary.collection.length-1]);
   toggleForm();
 });
 
+var thisLibrary = new Library();
