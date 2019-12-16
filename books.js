@@ -105,3 +105,14 @@ function displayNewBook(book) {
   let shelf = document.querySelector('#shelf');
   shelf.appendChild(bookContainer);
 }
+
+
+document.querySelector('#create').addEventListener('click',()=>{
+  let form = document.querySelector('#form-container');
+  form.style.height = form.style.height == 0 ? '100vh' : 0;
+});
+
+function createBook(){
+  let form = document.querySelector('#form-container');
+  form.style.height = 0;
+}

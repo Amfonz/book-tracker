@@ -43,6 +43,8 @@
     <!-- end shelf -->
     <div id="form-container">
       <form>
+        <h2>Add a Book</h2>
+        <hr>
         <label for="create-title">Title: </label>
         <input type="text" id="create-title">
         <label for="create-author">Author: </label>
@@ -50,12 +52,14 @@
         <label for="create-pages">Pages: </label>
         <input type="text" id="create-pages">
         <label for="create-cover">Cover Image (URL): </label>
-        <input type="text" id="create-cover">
-        <label for="create-read">Read? </label>
-        <input type="checkbox" id="create-read">
+        <input type="text" id="create-cover"><br>
+        <label for="create-read">Read? <input type="checkbox" id="create-read">
+        </label>
+        <input type="submit" value="Create">
       </form>
     </div>
   </main>
   <footer></footer>
+  <script src="books.js"></script>
 </body>
 </html>
