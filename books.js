@@ -99,6 +99,8 @@ function displayNewBook(book) {
   update.classList.add('update');
   let remove = document.createElement('button');
   remove.classList.add('remove');
+  remove.addEventListener('click',removeBook);
+  
   let read = document.createElement('button');
   read.classList.add('read');
   backButtons.appendChild(update);
@@ -134,12 +136,23 @@ function createBook(){
 
 }
 
+function getBookNode(button){
+  let node = button;
+  do {
+    node = node.parentNode;
+  }while(!node.classList.contains('book-container'));
+  return node;
+}
+
 function removeBook(e){
   //remove from library and remove from display
   //use dataset index
-  
-  let index = e.target.dataset.index;
-
+  //delete from display and remove from array
+  let targ = getBookNode(e.target);
+  let index = Number(targ.dataset.index);
+  library = library.slice(0,index).concat(library.slice(index+1));
+  let shelf = document.querySelector('#shelf');
+  shelf.removeChild(targ);
 }
 /*function updateShelfIndexes(){
   let books = document.querySelector('#shelf').children;
@@ -157,14 +170,14 @@ function toggleForm(){
 }
 document.querySelector('#create').addEventListener('click',toggleForm);
 
-document.querySelector("form").addEventListener('submit',(e)=>{
+document.querySelector("form").addEventListener('submit',(e) => {
   //createBook();
   //displayNewBook(library[library.length-1]);
   //toggleForm();
   e.preventDefault();
 });
 
-document.querySelector("#sub").addEventListener('click',()=>{
+document.querySelector("#sub").addEventListener('click',() => {
   createBook();
   displayNewBook(library[library.length-1]);
   toggleForm();
