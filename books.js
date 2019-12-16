@@ -135,7 +135,8 @@ function createBook(){
 
 function toggleForm(){
   let form = document.querySelector('#form-container');
-  form.style.height = form.style.height == 0 ? '100vh' : 0;
+  let height = form.style.height;
+  form.style.height = height == '0px' || height == 0 ? '100vh' : '0px';
 
 }
 document.querySelector('#create').addEventListener('click',toggleForm);

@@ -10,7 +10,7 @@
 }
 
 #shelf {
-  width: 90%;
+  width: 80%;
   margin: auto;
 }
 
@@ -18,7 +18,8 @@
 .book-container{
   background-color: transparent;
   perspective: 10000px;
-  position: absolute;
+  display: inline-block;
+  margin-right: 5px;
   height: 400px;
   width: 300px;
 }
@@ -152,7 +153,7 @@
 #form-container {
   position: absolute;
   top: 0;
-  height: 0;
+  height: 0px;
   width: 100vw;
   background-color: rgba(0,0,0,.5);
   transition: height .3s;
