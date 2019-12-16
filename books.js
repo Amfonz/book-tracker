@@ -48,28 +48,32 @@ function displayNewBook(book) {
   flipContainer.appendChild(front);
 
   let cover = document.createElement('img');
+  cover.classList.add('cover');
   cover.src = book.cover;
 
   front.appendChild(cover);
   
-  let whiteBar = document.createElement('white-bar');
+  let whiteBar = document.createElement('div');
+  whiteBar.classList.add('white-bar');
   let whiteSpan1 = document.createElement('span');
   whiteSpan1.textContent = "Your";
   let whiteSpan2 = document.createElement('span');
-  whiteSpan1.textContent = "Library";
+  whiteSpan2.textContent = "Library";
   let whiteBarImage = document.createElement('img');
   whiteBarImage.src = "https://img.icons8.com/ios-filled/50/000000/open-book.png";
   
   whiteBar.appendChild(whiteSpan1);
-  whiteBar.appendChild(whiteSpan2);
   whiteBar.appendChild(whiteBarImage);
+  whiteBar.appendChild(whiteSpan2);
   front.appendChild(whiteBar);
 
   let blackBox = document.createElement('div');
   blackBox.classList.add('black-box') ;
   let authorFront = document.createElement('p');
+  authorFront.classList.add('author-front');
   authorFront.textContent = book.author;
   let titleFront = document.createElement('p');
+  titleFront.classList.add('title-front');
   titleFront.textContent = book.title; 
 
   blackBox.appendChild(authorFront);
@@ -87,32 +91,65 @@ function displayNewBook(book) {
   backAuthor.textContent = `Author: ${book.author}`;
   let backPages = document.createElement('p');
   backPages.textContent = `Title: ${book.pages}`;
+  
+  let backButtons = document.createElement('div');
+  backButtons.classList.add('back-button-container');
+
   let update = document.createElement('button');
-  update.value = 'Update';
+  update.classList.add('update');
   let remove = document.createElement('button');
-  remove.value = 'Remove';
+  remove.classList.add('remove');
   let read = document.createElement('button');
-  read.value = 'read';
+  read.classList.add('read');
+  backButtons.appendChild(update);
+  backButtons.appendChild(remove);
+  backButtons.appendChild(read);
 
   back.appendChild(backTitle);
   back.appendChild(backAuthor);
   back.appendChild(backPages);
-  back.appendChild(update);
-  back.appendChild(remove);
-  back.appendChild(read);
+  back.appendChild(backButtons);
+
 
 
   let shelf = document.querySelector('#shelf');
-  shelf.appendChild(bookContainer);
+  let books = shelf.childNodes;
+
+  shelf.insertBefore(bookContainer,books[0]);
 }
 
 
-document.querySelector('#create').addEventListener('click',()=>{
-  let form = document.querySelector('#form-container');
-  form.style.height = form.style.height == 0 ? '100vh' : 0;
-});
+
 
 function createBook(){
-  let form = document.querySelector('#form-container');
-  form.style.height = 0;
+  let title = document.querySelector('#create-title').value;
+  let author = document.querySelector('#create-author').value;
+  let pages = document.querySelector('#create-pages').value;
+  let cover = document.querySelector('#create-cover').value;
+  if (cover == "") cover = "https://img.icons8.com/ios-filled/50/000000/open-book.png"
+  let read = Boolean(document.querySelector('#create-read').checked);
+
+  library.push(new Book(title,author,pages,read,cover));
+
 }
+
+function toggleForm(){
+  let form = document.querySelector('#form-container');
+  form.style.height = form.style.height == 0 ? '100vh' : 0;
+
+}
+document.querySelector('#create').addEventListener('click',toggleForm);
+
+document.querySelector("form").addEventListener('submit',(e)=>{
+  //createBook();
+  //displayNewBook(library[library.length-1]);
+  //toggleForm();
+  e.preventDefault();
+});
+
+document.querySelector("#sub").addEventListener('click',()=>{
+  createBook();
+  displayNewBook(library[library.length-1]);
+  toggleForm();
+});
+
