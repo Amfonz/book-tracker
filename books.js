@@ -25,13 +25,24 @@ function Book(title,author,pages,read,coverURL){
   this.read = read;
   this.cover = coverURL;
 }
-Book.prototype.info = ()=>{
+Book.prototype.info = function(){
   let info = `${title} by ${author}, ${pages} pages,`;
   if (this.read) {
     return info + ' read';
   }
   return info + ' not read yet';
+};
+Book.prototype.toggleRead = function() {
+  this.read = !this.read;
+};
+
+function Library() {
+  this.shelf = document.querySelector('#shelf');
+  this.collection = [];
 }
+
+
+
 
 function displayNewBook(book) {
   let bookContainer = document.createElement('div');
@@ -106,6 +117,7 @@ function displayNewBook(book) {
   backButtons.appendChild(update);
   backButtons.appendChild(remove);
   backButtons.appendChild(read);
+  
 
   back.appendChild(backTitle);
   back.appendChild(backAuthor);
@@ -154,12 +166,8 @@ function removeBook(e){
   let shelf = document.querySelector('#shelf');
   shelf.removeChild(targ);
 }
-/*function updateShelfIndexes(){
-  let books = document.querySelector('#shelf').children;
-  for(let i = 1; i < books.length; i++){
-    books[i].dataset.index = Number(books[i].dataset.index) + 1; 
-  }
-}*/
+
+
 
 
 function toggleForm(){
