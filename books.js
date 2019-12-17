@@ -60,6 +60,12 @@ Library.prototype.displayNewBook = function(book){
   cover.src = book.cover;
 
   front.appendChild(cover);
+
+  let readCircle = document.createElement('div');
+  readCircle.classList.add('read-circle');
+  front.appendChild(readCircle);
+
+
   
   let whiteBar = document.createElement('div');
   whiteBar.classList.add('white-bar');
@@ -97,7 +103,7 @@ Library.prototype.displayNewBook = function(book){
   let backAuthor = document.createElement('p');
   backAuthor.textContent = `Author: ${book.author}`;
   let backPages = document.createElement('p');
-  backPages.textContent = `Title: ${book.pages}`;
+  backPages.textContent = `Pages: ${book.pages}`;
   
   let backButtons = document.createElement('div');
   backButtons.classList.add('back-button-container');
@@ -112,6 +118,12 @@ Library.prototype.displayNewBook = function(book){
   backButtons.appendChild(update);
   backButtons.appendChild(remove);
   backButtons.appendChild(read);
+
+  if (book.read) {
+    readCircle.style.opacity = 1;
+    read.style.backgroundColor = 'green';
+  }
+
   
 
   back.appendChild(backTitle);
@@ -148,18 +160,51 @@ function getBookNode(button){
   }while(!node.classList.contains('book-container'));
   return node;
 }
+/*
+Library.prototype.updateBook = function(e) {
+  //toggle form
+  //change form headline
+  //make all the fields contain book data
+  //on submit update book
+  //and display the book
+  let book = this.collection[Number(getBookNode(e.target).dataset.index)];
+  book.title = document.querySelector('#create-title').value;
+  book.author = document.querySelector('#create-author').value;
+  book.pages = document.querySelector('#create-pages').value;
+  book.cover = document.querySelector('#create-cover').value;
+  if (book.cover == "") book.cover = "https://img.icons8.com/ios-filled/50/000000/open-book.png"
+  book.read = Boolean(document.querySelector('#create-read').checked);
+}
+
+function renderUpdateForm(e) {
+  let book = this.collection[Number(getBookNode(e.target).dataset.index)];
+  let form = document.querySelector('form');
+  form.firstChild.textContent = "Update Book";
+  document.querySelector('#create-title').value = book.title;
+  document.querySelector('#create-author').value = book.author;
+  document.querySelector('#create-pages').value = book.pages;
+  document.querySelector('#create-cover').value = book.cover;
+  //document.querySelector('#create-read').value = book.read;
+}
+*/
 
 Library.prototype.removeBook = function(e){
   //remove from library and remove from display
   //use dataset index
   //delete from display and remove from array
-  let targ = getBookNode(e.target);
-  let index = Number(targ.dataset.index);
+  let bookContainer = getBookNode(e.target);
+  let index = Number(bookContainer.dataset.index);
   this.collection = this.collection.slice(0,index).concat(this.collection.slice(index+1));
-  this.shelf.removeChild(targ);
+  this.updateIndicies(index);
+  this.shelf.removeChild(bookContainer);
 }
 
-
+Library.prototype.updateIndicies = function(startingIndex) {
+  let books = this.shelf.children;
+  for(let i = startingIndex+1; i < books.length; i++) {
+    books[i].dataset.index = Number(books[i].dataset.index) - 1;
+  }
+}
 
 
 function toggleForm(){
@@ -171,16 +216,11 @@ function toggleForm(){
 document.querySelector('#create').addEventListener('click',toggleForm);
 
 document.querySelector("form").addEventListener('submit',(e) => {
-  //createBook();
-  //displayNewBook(library[library.length-1]);
-  //toggleForm();
-  e.preventDefault();
-});
-
-document.querySelector("#sub").addEventListener('click',() => {
   thisLibrary.addBook();
   thisLibrary.displayNewBook(thisLibrary.collection[thisLibrary.collection.length-1]);
   toggleForm();
+  e.preventDefault();
 });
+
 
 var thisLibrary = new Library();
