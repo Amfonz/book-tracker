@@ -112,7 +112,6 @@ Library.prototype.displayNewBook = function(book){
   update.classList.add('update');
   let remove = document.createElement('button');
   remove.classList.add('remove');
-  remove.addEventListener('click',thisLibrary.removeBook.bind(this));
   let read = document.createElement('button');
   read.classList.add('read');
   backButtons.appendChild(update);
@@ -153,6 +152,7 @@ Library.prototype.addBook = function() {
 
 
 
+
 function getBookNode(button){
   let node = button;
   do {
@@ -188,15 +188,27 @@ function renderUpdateForm(e) {
 }
 */
 
-Library.prototype.removeBook = function(e){
+Library.prototype.removeBook = function(bookContainer){
   //remove from library and remove from display
   //use dataset index
   //delete from display and remove from array
-  let bookContainer = getBookNode(e.target);
   let index = Number(bookContainer.dataset.index);
   this.collection = this.collection.slice(0,index).concat(this.collection.slice(index+1));
   this.updateIndicies(index);
   this.shelf.removeChild(bookContainer);
+}
+
+Library.prototype.toggleReadBookDisplay = function(bookContainer,book){
+  let backButton = bookContainer.querySelector(".read");
+  let frontCheckmark = bookContainer.querySelector('.read-circle');
+
+  if (book.read) {
+    backButton.style.backgroundColor = 'green';
+    frontCheckmark.style.opacity = 1;
+  }else {
+    backButton.style.backgroundColor = 'white';
+    frontCheckmark.style.opacity = 0;
+  }
 }
 
 Library.prototype.updateIndicies = function(startingIndex) {
@@ -221,6 +233,52 @@ document.querySelector("form").addEventListener('submit',(e) => {
   toggleForm();
   e.preventDefault();
 });
+
+document.querySelector('#shelf').addEventListener('click',(e)=>{
+  if (e.target.classList.contains('update')) {
+    //do update stuff
+  } else if (e.target.classList.contains('remove')) {
+    //do remove stuff
+    let bookContainer = getBookNode(e.target);
+    thisLibrary.removeBook(bookContainer);
+
+  } else if ((e.target.classList.contains('read'))){
+    //do read stuff
+    let bookContainer = getBookNode(e.target);
+    let book = thisLibrary.collection[Number(bookContainer.dataset.index)];
+    book.toggleRead();
+    thisLibrary.toggleReadBookDisplay(bookContainer,book);
+
+  }else{
+     return;
+  }
+});
+
+document.querySelector('#shelf').addEventListener('mouseover',(e)=>{
+  if (e.target.tagName == "BUTTON") {    
+    e.target.style.backgroundColor = "green";    
+
+  }else{
+     return;
+  }
+});
+
+document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
+  if (e.target.tagName == "BUTTON" &&  e.target.classList.contains('read')) {
+      let bookContainer = getBookNode(e.target);
+      if (thisLibrary.collection[Number(bookContainer.dataset.index)].read) {
+        return;
+      }else {
+        e.target.style.backgroundColor = "white";  
+      }
+    }
+  else if (e.target.tagName == "BUTTON") {
+    e.target.style.backgroundColor = "white";  
+  }else {
+    return;
+  }
+});
+
 
 
 var thisLibrary = new Library();

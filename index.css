@@ -138,9 +138,7 @@
   background-repeat:no-repeat;
   margin-left: 5px;
 }
-.back button:hover {
-  background-color: green;
-}
+
 .back-button-container{
   text-align: center;
   position: relative;
