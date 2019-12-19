@@ -108,7 +108,7 @@ Library.prototype.renderBook = function(book,update = false){
 
   if (book.read) {
     readCircle.style.opacity = 1;
-    read.style.backgroundColor = 'green';
+    readButton.style.backgroundColor = 'green';
   }
 
   back.appendChild(backTitle);
@@ -257,7 +257,8 @@ document.querySelector('#shelf').addEventListener('mouseover',(e)=>{
 document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
   if (e.target.tagName == "BUTTON" &&  e.target.classList.contains('read')) {
       let bookContainer = getBookNode(e.target);
-      if (thisLibrary.collection[Number(bookContainer.dataset.index)].read) {
+      console.log(bookContainer.dataset.collectionIndex);
+      if (thisLibrary.collection[Number(bookContainer.dataset.collectionIndex)].read) {
         return;
       }else {
         e.target.style.backgroundColor = "white";  
