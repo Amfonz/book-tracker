@@ -1,28 +1,11 @@
-/*
-  Required functionlity:
-    create new book
-      - display form
-      - take form info create new book and add it to shelf
-          - at front
-    delete book
-      - remove book from display and library
-
-    read
-      - toggle read status on book object
-      - affects the button on back
-
-    check mark on cover of read books
-*/
-
-
-
-
-function Book(title,author,pages,read,coverURL){
+function Book(title,author,pages,read,coverURL,index){
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
   this.cover = coverURL;
+  this.container = document.createElement('div');
+  this.collectionIndex = index;
 }
 Book.prototype.info = function(){
   let info = `${title} by ${author}, ${pages} pages,`;
@@ -40,20 +23,27 @@ function Library() {
   this.collection = [];
 }
 
-Library.prototype.displayNewBook = function(book){
-  let bookContainer = document.createElement('div');
-  bookContainer.classList.add('book-container');
+Library.prototype.renderBook = function(book,update = false){
+  if(update) {
+    //clear old nodes
+    let nodes = book.container.children.length;
+    for(let i = nodes - 1; i >= 0; i--){
+      book.container.removeChild(book.container.children[i]);
+    }
+  }else { 
+    book.container.classList.add('book-container');
 
+  }
+  //build book
   let flipContainer = document.createElement('div');
   flipContainer.classList.add('flip-inner');
 
-  bookContainer.appendChild(flipContainer);
+  book.container.appendChild(flipContainer);
 
   let front = document.createElement('div');
   front.classList.add('front');
   
   flipContainer.appendChild(front);
-
 
   let cover = document.createElement('img');
   cover.classList.add('cover');
@@ -64,8 +54,6 @@ Library.prototype.displayNewBook = function(book){
   let readCircle = document.createElement('div');
   readCircle.classList.add('read-circle');
   front.appendChild(readCircle);
-
-
   
   let whiteBar = document.createElement('div');
   whiteBar.classList.add('white-bar');
@@ -108,33 +96,31 @@ Library.prototype.displayNewBook = function(book){
   let backButtons = document.createElement('div');
   backButtons.classList.add('back-button-container');
 
-  let update = document.createElement('button');
-  update.classList.add('update');
-  let remove = document.createElement('button');
-  remove.classList.add('remove');
-  let read = document.createElement('button');
-  read.classList.add('read');
-  backButtons.appendChild(update);
-  backButtons.appendChild(remove);
-  backButtons.appendChild(read);
+  let updateButton = document.createElement('button');
+  updateButton.classList.add('update');
+  let removeButton = document.createElement('button');
+  removeButton.classList.add('remove');
+  let readButton = document.createElement('button');
+  readButton.classList.add('read');
+  backButtons.appendChild(updateButton);
+  backButtons.appendChild(removeButton);
+  backButtons.appendChild(readButton);
 
   if (book.read) {
     readCircle.style.opacity = 1;
     read.style.backgroundColor = 'green';
   }
 
-  
-
   back.appendChild(backTitle);
   back.appendChild(backAuthor);
   back.appendChild(backPages);
   back.appendChild(backButtons);
 
-  let books = this.shelf.children;
-
-  bookContainer.dataset.index = books.length;
-  this.shelf.insertBefore(bookContainer,books[0]);
-  
+  if(!update){
+    book.container.dataset.collectionIndex = book.collectionIndex;
+    let shelfPosition = getShelfPosition(book.collectionIndex);
+    this.shelf.insertBefore(book.container,this.shelf.children[shelfPosition]);
+  }
 }
 
 Library.prototype.addBook = function() {
@@ -144,63 +130,23 @@ Library.prototype.addBook = function() {
   let cover = document.querySelector('#create-cover').value;
   if (cover == "") cover = "https://img.icons8.com/ios-filled/50/000000/open-book.png"
   let read = Boolean(document.querySelector('#create-read').checked);
-
-  this.collection.push(new Book(title,author,pages,read,cover));
-
+  let newBook = 
+    new Book(title,author,pages,read,cover,this.collection.length);
+  thisLibrary.collection.push(newBook);
+  return newBook;
 }
-
-
-
-
-
-function getBookNode(button){
-  let node = button;
-  do {
-    node = node.parentNode;
-  }while(!node.classList.contains('book-container'));
-  return node;
-}
-/*
-Library.prototype.updateBook = function(e) {
-  //toggle form
-  //change form headline
-  //make all the fields contain book data
-  //on submit update book
-  //and display the book
-  let book = this.collection[Number(getBookNode(e.target).dataset.index)];
-  book.title = document.querySelector('#create-title').value;
-  book.author = document.querySelector('#create-author').value;
-  book.pages = document.querySelector('#create-pages').value;
-  book.cover = document.querySelector('#create-cover').value;
-  if (book.cover == "") book.cover = "https://img.icons8.com/ios-filled/50/000000/open-book.png"
-  book.read = Boolean(document.querySelector('#create-read').checked);
-}
-
-function renderUpdateForm(e) {
-  let book = this.collection[Number(getBookNode(e.target).dataset.index)];
-  let form = document.querySelector('form');
-  form.firstChild.textContent = "Update Book";
-  document.querySelector('#create-title').value = book.title;
-  document.querySelector('#create-author').value = book.author;
-  document.querySelector('#create-pages').value = book.pages;
-  document.querySelector('#create-cover').value = book.cover;
-  //document.querySelector('#create-read').value = book.read;
-}
-*/
 
 Library.prototype.removeBook = function(bookContainer){
-  //remove from library and remove from display
-  //use dataset index
-  //delete from display and remove from array
-  let index = Number(bookContainer.dataset.index);
+  let index = Number(bookContainer.dataset.collectionIndex);
+  this.updateContainerData(index);
   this.collection = this.collection.slice(0,index).concat(this.collection.slice(index+1));
-  this.updateIndicies(index);
   this.shelf.removeChild(bookContainer);
 }
 
-Library.prototype.toggleReadBookDisplay = function(bookContainer,book){
-  let backButton = bookContainer.querySelector(".read");
-  let frontCheckmark = bookContainer.querySelector('.read-circle');
+
+Library.prototype.toggleReadBookDisplay = function(book){
+  let backButton = book.container.querySelector(".read");
+  let frontCheckmark = book.container.querySelector('.read-circle');
 
   if (book.read) {
     backButton.style.backgroundColor = 'green';
@@ -211,43 +157,88 @@ Library.prototype.toggleReadBookDisplay = function(bookContainer,book){
   }
 }
 
-Library.prototype.updateIndicies = function(startingIndex) {
-  let books = this.shelf.children;
-  for(let i = startingIndex+1; i < books.length; i++) {
-    books[i].dataset.index = Number(books[i].dataset.index) - 1;
+Library.prototype.updateContainerData = function(startingIndex){
+  startingIndex++;
+  for (let i = startingIndex; i < this.collection.length; i++) {
+    this.collection[i].collectionIndex--;
+    this.collection[i].container.dataset.collectionIndex = this.collection[i].collectionIndex;
   }
 }
 
+Library.prototype.updateBook = function() {
+  let bookIndex = Number(document.querySelector('#update-form p').textContent);
+  let book = thisLibrary.collection[bookIndex];
 
-function toggleForm(){
-  let form = document.querySelector('#form-container');
-  let height = form.style.height;
-  form.style.height = height == '0px' || height == 0 ? '100vh' : '0px';
+  book.title = document.querySelector('#update-title').value;
+  book.author = document.querySelector('#update-author').value;
+  book.pages = document.querySelector('#update-pages').value;
+  book.cover = document.querySelector('#update-cover').value;
+  if (book.cover == "") book.cover = "https://img.icons8.com/ios-filled/50/000000/open-book.png"
+  book.read = Boolean(document.querySelector('#update-read').checked);
+  return book;
+}
+
+function getShelfPosition(collectionIndex) {
+  return thisLibrary.collection.length - collectionIndex - 1;
+}
+
+function getBookNode(button){
+  let node = button;
+  do {
+    node = node.parentNode;
+  }while(!node.classList.contains('book-container'));
+  return node;
+}
+
+function toggleForm(form){
+  let formContainer = document.querySelector(`#${form}-container`);
+  let height = formContainer.style.height;
+  formContainer.style.height = height == '0px' || height == 0 ? '100vh' : '0px';
 
 }
-document.querySelector('#create').addEventListener('click',toggleForm);
 
-document.querySelector("form").addEventListener('submit',(e) => {
-  thisLibrary.addBook();
-  thisLibrary.displayNewBook(thisLibrary.collection[thisLibrary.collection.length-1]);
-  toggleForm();
+function populateUpdateForm(book){
+  document.querySelector('#update-title').value = book.title;
+  document.querySelector('#update-author').value = book.author;
+  document.querySelector('#update-pages').value = book.pages;
+  document.querySelector('#update-cover').value = book.cover;
+  document.querySelector('#update-read').checked = book.read;
+  document.querySelector('#update-form p').textContent = book.container.dataset.collectionIndex;
+}
+
+
+document.querySelector('#create-book').addEventListener('click',()=>{toggleForm('create')});
+
+document.querySelector("#create-form").addEventListener('submit',(e) => {
+  let book = thisLibrary.addBook();
+  thisLibrary.renderBook(book);
+  toggleForm('create');
+  e.preventDefault();
+});
+
+document.querySelector("#update-form").addEventListener('submit',(e) => {
+  let book = thisLibrary.updateBook();
+  thisLibrary.renderBook(book,true);
+  toggleForm('update');
   e.preventDefault();
 });
 
 document.querySelector('#shelf').addEventListener('click',(e)=>{
   if (e.target.classList.contains('update')) {
-    //do update stuff
+    let bookContainer = getBookNode(e.target);
+    let book = thisLibrary.collection[Number(bookContainer.dataset.collectionIndex)];
+    toggleForm('update');
+    populateUpdateForm(book);
   } else if (e.target.classList.contains('remove')) {
-    //do remove stuff
     let bookContainer = getBookNode(e.target);
     thisLibrary.removeBook(bookContainer);
 
-  } else if ((e.target.classList.contains('read'))){
+  } else if (e.target.classList.contains('read')){
     //do read stuff
     let bookContainer = getBookNode(e.target);
-    let book = thisLibrary.collection[Number(bookContainer.dataset.index)];
+    let book = thisLibrary.collection[Number(bookContainer.dataset.collectionIndex)];
     book.toggleRead();
-    thisLibrary.toggleReadBookDisplay(bookContainer,book);
+    thisLibrary.toggleReadBookDisplay(book);
 
   }else{
      return;
@@ -278,7 +269,5 @@ document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
     return;
   }
 });
-
-
 
 var thisLibrary = new Library();

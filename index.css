@@ -1,11 +1,11 @@
-#create {
+#create-book {
   border-radius: 50%;
   border: none;
   background-color: green;
   width: 50px;
   height: 50px;
 }
-#create:hover {
+#create-book:hover {
   background-color: grey;
 }
 
@@ -165,7 +165,7 @@
 }
 
 
-#form-container {
+.form-container {
   position: absolute;
   top: 0;
   height: 0px;
@@ -174,7 +174,7 @@
   transition: height .3s;
   overflow: hidden;
 }
-form {
+.form {
   width: 80%;
   margin: auto;
   height: 80%;
