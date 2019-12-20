@@ -1,4 +1,4 @@
-function Book(title,author,pages,read,coverURL,index){
+function Book(title,author,pages,read,coverURL,index) {
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -7,7 +7,7 @@ function Book(title,author,pages,read,coverURL,index){
   this.container = document.createElement('div');
   this.collectionIndex = index;
 }
-Book.prototype.info = function(){
+Book.prototype.info = function() {
   let info = `${title} by ${author}, ${pages} pages,`;
   if (this.read) {
     return info + ' read';
@@ -23,7 +23,7 @@ function Library() {
   this.collection = [];
 }
 
-Library.prototype.renderBook = function(book,update = false){
+Library.prototype.renderBook = function(book,update = false) {
   if(update) {
     //clear old nodes
     let nodes = book.container.children.length;
@@ -116,7 +116,7 @@ Library.prototype.renderBook = function(book,update = false){
   back.appendChild(backPages);
   back.appendChild(backButtons);
 
-  if(!update){
+  if(!update) {
     book.container.dataset.collectionIndex = book.collectionIndex;
     let shelfPosition = getShelfPosition(book.collectionIndex);
     this.shelf.insertBefore(book.container,this.shelf.children[shelfPosition]);
@@ -136,7 +136,7 @@ Library.prototype.addBook = function() {
   return newBook;
 }
 
-Library.prototype.removeBook = function(bookContainer){
+Library.prototype.removeBook = function(bookContainer) {
   let index = Number(bookContainer.dataset.collectionIndex);
   this.updateContainerData(index);
   this.collection = this.collection.slice(0,index).concat(this.collection.slice(index+1));
@@ -144,7 +144,7 @@ Library.prototype.removeBook = function(bookContainer){
 }
 
 
-Library.prototype.toggleReadBookDisplay = function(book){
+Library.prototype.toggleReadBookDisplay = function(book) {
   let backButton = book.container.querySelector(".read");
   let frontCheckmark = book.container.querySelector('.read-circle');
 
@@ -157,7 +157,7 @@ Library.prototype.toggleReadBookDisplay = function(book){
   }
 }
 
-Library.prototype.updateContainerData = function(startingIndex){
+Library.prototype.updateContainerData = function(startingIndex) {
   startingIndex++;
   for (let i = startingIndex; i < this.collection.length; i++) {
     this.collection[i].collectionIndex--;
@@ -182,7 +182,7 @@ function getShelfPosition(collectionIndex) {
   return thisLibrary.collection.length - collectionIndex - 1;
 }
 
-function getBookNode(button){
+function getBookNode(button) {
   let node = button;
   do {
     node = node.parentNode;
@@ -190,14 +190,14 @@ function getBookNode(button){
   return node;
 }
 
-function toggleForm(form){
+function toggleForm(form) {
   let formContainer = document.querySelector(`#${form}-container`);
   let height = formContainer.style.height;
   formContainer.style.height = height == '0px' || height == 0 ? '100vh' : '0px';
 
 }
 
-function populateUpdateForm(book){
+function populateUpdateForm(book) {
   document.querySelector('#update-title').value = book.title;
   document.querySelector('#update-author').value = book.author;
   document.querySelector('#update-pages').value = book.pages;
@@ -257,7 +257,6 @@ document.querySelector('#shelf').addEventListener('mouseover',(e)=>{
 document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
   if (e.target.tagName == "BUTTON" &&  e.target.classList.contains('read')) {
       let bookContainer = getBookNode(e.target);
-      console.log(bookContainer.dataset.collectionIndex);
       if (thisLibrary.collection[Number(bookContainer.dataset.collectionIndex)].read) {
         return;
       }else {
@@ -271,4 +270,68 @@ document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
   }
 });
 
+
+
+function storageAvailable() {
+  try{
+    window.localStorage.setItem('x','x');
+    window.localStorage.removeItem('x');
+    return true;
+  }catch (exception) {
+    return false;
+  }
+}
+
+function loadLibrary() {
+  let keys = Object.keys(window.localStorage);
+  for(let i = keys.length - 1; i >= 0; i--) {
+    let bookFields = window.localStorage.getItem(keys[i]).split(',');
+    let title = bookFields[0];
+    let author = bookFields[1];
+    let pages = Number(bookFields[2]);
+    let read = Boolean(bookFields[3]);
+    let cover = bookFields[4];
+    let collectionIndex = Number(bookFields[5]);
+    let book = new Book(title,author,pages,read,cover,collectionIndex);
+    thisLibrary.collection.push(book);
+    thisLibrary.renderBook(book);
+  }
+  return;
+}
+function saveLibrary() {
+  window.localStorage.clear();
+  let collection = thisLibrary.collection;
+  collection.forEach(book => {
+    /*
+      this.title = title;
+      this.author = author;
+      this.pages = pages;
+      this.read = read;
+      this.cover = coverURL;
+      this.container = document.createElement('div');
+      this.collectionIndex = index;
+    */
+    if (!book.read) book.read = '';
+    let data = `${book.title},${book.author},${book.pages},${book.read},${book.cover},${book.collectionIndex}`;
+    window.localStorage.setItem(`${book.collectionIndex}`,data);
+  });
+}
+
+window.addEventListener('unload',saveLibrary);
+
+function initialize() {
+  if(storageAvailable()) {
+      loadLibrary();
+  }else {
+    return;
+  }
+}
 var thisLibrary = new Library();
+initialize();
+
+
+/*
+todo 
+storage (sort out unloading events)
+styling
+*/
