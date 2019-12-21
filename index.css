@@ -1,16 +1,31 @@
+:root {
+  --green: hsl( 120,60%,46%);
+  --base-font: 1rem;
+}
+header {
+  position: relative;
+  width: 90%;
+  margin: 20px auto 0;
+}
+
+
 #create-book {
-  border-radius: 50%;
+  position: relative;
+  left: 90%;
+  top: -40px;
+  border-radius: 5px;
   border: none;
-  background-color: green;
-  width: 50px;
-  height: 50px;
+  background-color: var(--green);
+  width: 150px;
+  height: 40px;
+  color: white;
 }
 #create-book:hover {
-  background-color: grey;
+  background-color: hsl(120,60%,36%);
 }
 
 #shelf {
-  width: 80%;
+  width: 90%;
   margin: auto;
 }
 
@@ -19,7 +34,8 @@
   background-color: transparent;
   perspective: 10000px;
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 20px;
+  margin-bottom: 20px; 
   height: 400px;
   width: 300px;
 }
@@ -43,7 +59,7 @@
   background-position-y: 2px;
   width: 30px;
   height: 30px;
-  background-color: green;
+  background-color: var(--green);
   border-radius: 50%;
   opacity: 0;
   
@@ -160,9 +176,33 @@
   background-image: url('remove-24px.svg');
   background-position-x: 8px;
   background-position-y: 8px;
-
-
 }
+
+.tooltip {
+  background-color: var(--green);
+  padding: 7px;
+  border-radius: 10px;
+}
+#tool-edit {
+  position: absolute;
+  left: 65px;
+  top: 50px;
+  visibility: hidden;
+}
+#tool-read {
+  position: absolute;
+  left: 130px;
+  top: 50px;
+  visibility: hidden;
+}
+#tool-remove {
+  position: absolute;
+  left: 100px;
+  top: 50px;
+  visibility: hidden;
+}
+
+
 
 
 .form-container {
@@ -231,6 +271,12 @@ label[for='create-read'] {
 
 
 /* typography */
+h1 {
+  font-size: 3rem;
+}
+#create-book {
+  font-size: calc(var(--base-font));
+}
 .title-front {
   font-size: 150%;
 }

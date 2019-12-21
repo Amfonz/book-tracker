@@ -106,9 +106,28 @@ Library.prototype.renderBook = function(book,update = false) {
   backButtons.appendChild(removeButton);
   backButtons.appendChild(readButton);
 
+  let editTool = document.createElement('span');
+  editTool.textContent = "Edit Book";
+  editTool.classList.add('tooltip');
+  editTool.id = 'tool-edit';
+
+  let removeTool = document.createElement('span');
+  removeTool.textContent = "Remove Book";
+  removeTool.classList.add('tooltip');
+  removeTool.id = 'tool-remove';
+  
+  let readTool = document.createElement('span');
+  readTool.textContent = "Change Read Status";
+  readTool.classList.add('tooltip');
+  readTool.id = 'tool-read';
+
+  backButtons.appendChild(editTool);
+  backButtons.appendChild(removeTool);
+  backButtons.appendChild(readTool);
+
   if (book.read) {
     readCircle.style.opacity = 1;
-    readButton.style.backgroundColor = 'green';
+    readButton.style.backgroundColor = 'hsl(120,60%,46%)';
   }
 
   back.appendChild(backTitle);
@@ -149,7 +168,7 @@ Library.prototype.toggleReadBookDisplay = function(book) {
   let frontCheckmark = book.container.querySelector('.read-circle');
 
   if (book.read) {
-    backButton.style.backgroundColor = 'green';
+    backButton.style.backgroundColor = 'hsl(120,60%,46%)';
     frontCheckmark.style.opacity = 1;
   }else {
     backButton.style.backgroundColor = 'white';
@@ -247,30 +266,41 @@ document.querySelector('#shelf').addEventListener('click',(e)=>{
 
 document.querySelector('#shelf').addEventListener('mouseover',(e)=>{
   if (e.target.tagName == "BUTTON") {    
-    e.target.style.backgroundColor = "green";    
-
+    e.target.style.backgroundColor = "hsl(120,60%,46%)";    
+    if(e.target.classList.contains('update')){
+      e.target.parentNode.querySelector('#tool-edit').style.visibility = 'visible';
+    }else if (e.target.classList.contains('remove')) {
+      e.target.parentNode.querySelector('#tool-remove').style.visibility = 'visible';
+    }else {
+      e.target.parentNode.querySelector('#tool-read').style.visibility = 'visible';
+    }
   }else{
      return;
   }
 });
 
 document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
-  if (e.target.tagName == "BUTTON" &&  e.target.classList.contains('read')) {
-      let bookContainer = getBookNode(e.target);
-      if (thisLibrary.collection[Number(bookContainer.dataset.collectionIndex)].read) {
+  if (e.target.tagName == "BUTTON") {
+    if(e.target.classList.contains('update')){
+      e.target.parentNode.querySelector('#tool-edit').style.visibility = 'hidden';
+      e.target.style.backgroundColor = "white";  
+
+    }else if (e.target.classList.contains('remove')) {
+      e.target.parentNode.querySelector('#tool-remove').style.visibility = 'hidden';
+      e.target.style.backgroundColor = "white";  
+
+    }else {
+      let container = getBookNode(e.target);
+      e.target.parentNode.querySelector('#tool-read').style.visibility = 'hidden';
+      if(thisLibrary.collection[container.dataset.collectionIndex].read){
         return;
-      }else {
-        e.target.style.backgroundColor = "white";  
       }
+      e.target.style.backgroundColor = "white";  
     }
-  else if (e.target.tagName == "BUTTON") {
-    e.target.style.backgroundColor = "white";  
   }else {
     return;
   }
 });
-
-
 
 function storageAvailable() {
   try{
@@ -334,4 +364,7 @@ initialize();
 todo 
 storage (sort out unloading events)
 styling
+  - shelf
+  - buttons
+make form come down from where ever screen is
 */
