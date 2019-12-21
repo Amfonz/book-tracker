@@ -162,7 +162,6 @@ Library.prototype.removeBook = function(bookContainer) {
   this.shelf.removeChild(bookContainer);
 }
 
-
 Library.prototype.toggleReadBookDisplay = function(book) {
   let backButton = book.container.querySelector(".read");
   let frontCheckmark = book.container.querySelector('.read-circle');
@@ -321,7 +320,6 @@ document.querySelector('#update-container button').addEventListener('click',()=>
   toggleForm('update');
 
 });
-
 
 function storageAvailable() {
   try{
