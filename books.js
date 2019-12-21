@@ -211,9 +211,9 @@ function getBookNode(button) {
 
 function toggleForm(form) {
   let formContainer = document.querySelector(`#${form}-container`);
+  formContainer.style.top = window.pageYOffset + 'px';
   let height = formContainer.style.height;
   formContainer.style.height = height == '0px' || height == 0 ? '100vh' : '0px';
-
 }
 
 function populateUpdateForm(book) {
@@ -224,7 +224,6 @@ function populateUpdateForm(book) {
   document.querySelector('#update-read').checked = book.read;
   document.querySelector('#update-form p').textContent = book.container.dataset.collectionIndex;
 }
-
 
 document.querySelector('#create-book').addEventListener('click',()=>{toggleForm('create')});
 
@@ -348,7 +347,15 @@ function saveLibrary() {
 }
 
 window.addEventListener('unload',saveLibrary);
+window.addEventListener('scroll',()=>{
+  setTimeout(()=>{
+    let updateFormContainer = document.querySelector(`#update-container`);
+    let createFormContainer = document.querySelector(`#create-container`);
 
+    createFormContainer.style.top = window.pageYOffset + 'px';
+    updateFormContainer.style.top = window.pageYOffset + 'px';
+  },200);
+});
 function initialize() {
   if(storageAvailable()) {
       loadLibrary();
@@ -366,5 +373,4 @@ storage (sort out unloading events)
 styling
   - shelf
   - buttons
-make form come down from where ever screen is
 */
