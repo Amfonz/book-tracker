@@ -214,6 +214,17 @@ function toggleForm(form) {
   formContainer.style.top = window.pageYOffset + 'px';
   let height = formContainer.style.height;
   formContainer.style.height = height == '0px' || height == 0 ? '100vh' : '0px';
+  if(form == 'create'){
+    clearCreateForm();
+  }
+}
+
+function clearCreateForm() {
+  document.querySelector('#create-title').value = '';
+  document.querySelector('#create-author').value = '';
+  document.querySelector('#create-pages').value = '';
+  document.querySelector('#create-cover').value = '';
+  document.querySelector('#create-read').checked = false;
 }
 
 function populateUpdateForm(book) {
@@ -301,6 +312,17 @@ document.querySelector('#shelf').addEventListener('mouseout',(e)=>{
   }
 });
 
+document.querySelector('#create-container button').addEventListener('click',()=>{
+  toggleForm('create');
+
+});
+
+document.querySelector('#update-container button').addEventListener('click',()=>{
+  toggleForm('update');
+
+});
+
+
 function storageAvailable() {
   try{
     window.localStorage.setItem('x','x');
@@ -372,5 +394,4 @@ todo
 storage (sort out unloading events)
 styling
   - shelf
-  - buttons
 */

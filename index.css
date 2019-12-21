@@ -6,12 +6,14 @@ header {
   position: relative;
   width: 90%;
   margin: 20px auto 0;
+  border-bottom: 1px solid black;
+  overflow: auto;
 }
 
 
 #create-book {
   position: relative;
-  left: 90%;
+  left: 80%;
   top: -40px;
   border-radius: 5px;
   border: none;
@@ -26,7 +28,7 @@ header {
 
 #shelf {
   width: 90%;
-  margin: auto;
+  margin: 20px auto;
 }
 
 /*     Style of book             */
@@ -38,10 +40,11 @@ header {
   margin-bottom: 20px; 
   height: 400px;
   width: 300px;
-}
+  }
 .book-container:hover .back{
   opacity: 1;
 }
+
 .front {
   height: 100%;
   border: 1px solid black;
@@ -213,7 +216,27 @@ header {
   background-color: rgba(0,0,0,.6);
   transition: height .3s;
   overflow: hidden;
+  clear: both;
 }
+
+.exit-form {
+  float: right;
+  position: relative;
+  top: 7%;
+  right: 9%;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0,0,0,.3);
+  height: 50px;
+  width: 50px;
+  color: white;
+  font-size: calc(var(--base-font) * 1.2);
+}
+.exit-form:hover {
+    background-color: rgba(0,0,0,.7);
+
+}
+
 .form {
   width: 80%;
   margin: auto;
