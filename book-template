@@ -1,0 +1,36 @@
+/*
+skeleton of a book
+ <div class="book-container">
+        <div class="flip-inner">
+          <div class="front">
+            <div class="read-circle></div>
+            <img class="cover" src="https://www.lwcurrey.com/pictures/158266.jpg?v=1517245337">
+            <div class="white-bar">
+              <span>Your</span>
+              <img src="https://img.icons8.com/ios-filled/50/000000/open-book.png">
+              <span>Library</span>
+            </div>
+            <div class="black-box">
+              <p class="author-front">Ray Bradbury</p>
+              <p class="title-front">The Martian Chronicles</p>
+            </div>
+          </div>
+          <div class="back">
+            <p>Title: <span class="title">The Martian Chronicles</span></p>
+            <p>Author: <span class="author">Ray Bradbury</span></p>
+            <p>Pages: <span class="pages"> 200</span></p>
+            <div class="back-button-container">
+              <button class="update"></button>
+              <button class="remove"></button>
+              <button class="read"></button>
+
+              <span class="tooltip" id="tool-edit">Edit Book</span>
+              <span class="tooltip" id="tool-remove">Remove Book</span>
+              <span class="tooltip" id="tool-read">Mark as Read</span>
+            </div>
+          </div>
+        </div>
+      </div>
+*/
+
+
